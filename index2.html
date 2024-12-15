@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <title>Weather App with International Clocks</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: "Oswald", sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #a8d0e6, #f8f9fa);
+            color: #333;
+        }
+
+        .app-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .header-search {
+            background: #4a90e2;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 80%;
+            padding: 15px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 20px;
+            background: transparent;
+            box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+        }
+
+        .location-info {
+            text-align: center;
+        }
+
+        .city {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .date {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .current-weather {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .temperature {
+            font-size: 4em;
+            color: #ff7f50;
+        }
+
+        .weather-description {
+            font-size: 1.5em;
+            text-transform: capitalize;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        .temp-range {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        /* World Clocks */
+        .world-clocks {
+            padding: 20px;
+            background: #f1f4f9;
+        }
+
+        .world-clocks h3 {
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #4a90e2;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .clock-box {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .clock-box h5 {
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .clock-box p {
+            font-size: 1.5em;
+            color: #4a90e2;
+            font-weight: bold;
+            margin: 10px 0 0;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="app-container">
+            <header class="header-search">
+                <input type="text" autocomplete="off" class="search-box" placeholder="Search for a city..." />
+            </header>
+            <main class="main-content">
+                <section class="location-info">
+                    <div class="city">US</div>
+                    <div class="date">Saturday, 14 December 2024</div>
+                </section>
+                <div class="current-weather">
+                    <div class="temperature">15<span>°c</span></div>
+                    <div class="weather-description">Sunny</div>
+                    <div class="temp-range">13°c / 16°c</div>
+                </div>
+            </main>
+        </div>
+        <!-- International Clocks Section -->
+        <section class="world-clocks">
+            <h3>International Clocks</h3>
+            <div class="row">
+                <div class="clock-box">
+                    <h5>London, UK</h5>
+                    <p id="clock-london">00:00:00</p>
+                </div>
+                <div class="clock-box">
+                    <h5>Tokyo, Japan</h5>
+                    <p id="clock-tokyo">00:00:00</p>
+                </div>
+                <div class="clock-box">
+                    <h5>Sydney, Australia</h5>
+                    <p id="clock-sydney">00:00:00</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        function updateClocks() {
+            const now = new Date();
+
+            // Calculate time in different time zones
+            const londonTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/London" }));
+            const tokyoTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+            const sydneyTime = new Date(now.toLocaleString("en-US", { timeZone: "Australia/Sydney" }));
+
+            // Update clock elements
+            document.getElementById('clock-london').innerText = londonTime.toLocaleTimeString();
+            document.getElementById('clock-tokyo').innerText = tokyoTime.toLocaleTimeString();
+            document.getElementById('clock-sydney').innerText = sydneyTime.toLocaleTimeString();
+        }
+
+        // Update clocks every second
+        setInterval(updateClocks, 1000);
+        updateClocks(); // Call immediately to show clocks without delay
+
+        const api = {
+            key: "fcc8de7015bbb202209bbf0261babf4c",
+            base: "https://api.openweathermap.org/data/2.5/"
+        }
+
+        const searchbox = document.querySelector('.search-box');
+        searchbox.addEventListener('keypress', setQuery);
+
+        function setQuery(evt) {
+            if (evt.keyCode == 13) {
+                getResults(searchbox.value);
+            }
+        }
+
+        function getResults(query) {
+            fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
+                .then(weather => {
+                    return weather.json();
+                }).then(displayResults);
+        }
+
+        function displayResults(weather) {
+            let city = document.querySelector('.location-info .city');
+            city.innerText = `${weather.name}, ${weather.sys.country}`;
+
+            let now = new Date();
+            let date = document.querySelector('.location-info .date');
+            date.innerText = dateBuilder(now);
+
+            let temp = document.querySelector('.current-weather .temperature');
+            temp.innerHTML = `${Math.round(weather.main.temp)}<span>°c</span>`;
+
+            let weather_el = document.querySelector('.current-weather .weather-description');
+            weather_el.innerText = weather.weather[0].main;
+
+            let hilow = document.querySelector('.current-weather .temp-range');
+            hilow.innerText = `${Math.round(weather.main.temp_min)}°c / ${Math.round(weather.main.temp_max)}°c`;
+        }
+
+        function dateBuilder(d) {
+            let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+            let day = days[d.getDay()];
+            let date = d.getDate();
+            let month = months[d.getMonth()];
+            let year = d.getFullYear();
+
+            return `${day} ${date} ${month} ${year}`;
+        }
+    </script>
+</body>
+
+</html>
